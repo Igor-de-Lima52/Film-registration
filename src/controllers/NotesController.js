@@ -5,12 +5,12 @@ class NotesController{
   async create(req, res){
     const { title, description, rating, tags } = req.body;
 
-    const { user_id } = req.params;
+    const user_id = req.user.id;
     
     const isValidRating = rating >= 1 && rating <=5;
 
     if(!isValidRating){
-      throw new AppError("A avaliação do filme tem que ser entre 1 e 5.")
+      throw new AppError("A avaliação do filme tem que ser entre 1 e 5.");
     }
     const [ note_id ] = await knex("notes").insert({
       title,
@@ -49,7 +49,8 @@ class NotesController{
     return res.json();
   }
   async index(req, res){
-    const { title, user_id, tags } = req.query;
+    const { title, tags } = req.query;
+    const user_id = req.user.id;
 
     let notes;
 
@@ -63,15 +64,16 @@ class NotesController{
         "notes.user_id"
       ]).where("notes.user_id", user_id)
       .whereLike("notes.title", `%${title}%`)
-      .whereIn("name", filterTags)
+      .whereIn("tags.name", filterTags)
       .innerJoin("notes", "notes.id", "tags.note_id")
+      .groupBy("notes.id")
       .orderBy("notes.title");
     }
     else{
       notes = await knex("notes")
         .where({ user_id })
         .whereLike("title", `%${title}%`)
-        .orderBy("title")
+        .orderBy("title");    
     }
 
     const userTags = await knex("tags").where({ user_id });
