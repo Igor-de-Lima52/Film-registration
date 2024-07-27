@@ -104,7 +104,7 @@ class NotesController{
     const isValidRating = rating >= 1 && rating <=5;
 
     if(!isValidRating){
-      throw new AppError("A avaliação do filme tem que ser entre 1 e 5.")
+      throw new AppError("A avaliação do filme tem que ser entre 1 e 5.");
     }
     const [ note_id ] = await knex("notes").insert({
       title,
@@ -158,7 +158,7 @@ class NotesController{
         "notes.user_id"
       ]).where("notes.user_id", user_id)
       .whereLike("notes.title", `%${title}%`)
-      .whereIn("name", filterTags)
+      .whereIn("tags.name", filterTags)
       .innerJoin("notes", "notes.id", "tags.note_id")
       .groupBy("notes.id")
       .orderBy("notes.title");
@@ -167,7 +167,7 @@ class NotesController{
       notes = await knex("notes")
         .where({ user_id })
         .whereLike("title", `%${title}%`)
-        .orderBy("title")
+        .orderBy("title");    
     }
 
     const userTags = await knex("tags").where({ user_id });
