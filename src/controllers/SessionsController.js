@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 const { compare } = require("bcryptjs");
@@ -33,11 +31,7 @@ class SessionsController{
 
 }
 
-=======
-const knex = require("knex");
-=======
 const knex = require("../database/knex");
->>>>>>> 94d6256 (Preparing to Deploy)
 const AppError = require("../utils/AppError");
 const { compare } = require("bcryptjs");
 const authConfig = require("../configs/auth");
@@ -70,5 +64,4 @@ class SessionsController{
 
 }
 
->>>>>>> 6a4760d (Back-end finished)
 module.exports = SessionsController;
